@@ -1,6 +1,7 @@
 package newrelic
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 
@@ -150,8 +151,35 @@ func resourceNewRelicDashboard() *schema.Resource {
 				Optional:    true,
 				MaxItems:    300,
 				Description: "A nested block that describes a visualization. Up to 300 widget blocks are allowed in a dashboard definition.",
+				// DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+
+				// 	// o, n := d.GetChange(k)
+
+				// 	fmt.Println("****************************")
+				// 	fmt.Printf("\n DiffSuppressFunc K:    %+v \n", k)
+				// 	fmt.Printf("\n DiffSuppressFunc OLD:  %+v \n", old)
+				// 	fmt.Printf("\n DiffSuppressFunc NEW:  %+v \n", new)
+				// 	fmt.Printf("\n DiffSuppressFunc HAS:  %+v \n", d.HasChange(k))
+				// 	// fmt.Printf("\n DiffSuppressFunc DIFF: %+v \n", d.GetChange(k))
+				// 	fmt.Println("****************************")
+
+				// 	if strings.Contains(k, "account_id") {
+				// 		return true
+				// 	}
+
+				// 	if strings.Contains(k, "visualization") {
+				// 		return true
+				// 	}
+
+				// 	return !d.HasChange(k)
+				// },
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"account_id": {
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Description: "Source account to fetch data from, if not the current account.",
+						},
 						"widget_id": {
 							Type:        schema.TypeInt,
 							Computed:    true,
@@ -342,6 +370,10 @@ func resourceNewRelicDashboardCreate(d *schema.ResourceData, meta interface{}) e
 	}
 
 	d.SetId(strconv.Itoa(dashboard.ID))
+
+	fmt.Println("****************************")
+	fmt.Printf("\n\n\n DASHBOARD RESPONSE: %+v \n\n\n", toJSON(dashboard))
+	fmt.Println("****************************")
 
 	return resourceNewRelicDashboardRead(d, meta)
 }

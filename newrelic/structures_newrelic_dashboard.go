@@ -29,6 +29,7 @@ func expandDashboard(d *schema.ResourceData) (*dashboards.Dashboard, error) {
 	}
 
 	log.Printf("[INFO] widget schema: %+v\n", d.Get("widget"))
+
 	if widgets, ok := d.GetOk("widget"); ok {
 		expandedWidgets, err := expandWidgets(widgets.(*schema.Set).List())
 
@@ -81,6 +82,10 @@ func expandWidget(cfg map[string]interface{}) (*dashboards.DashboardWidget, erro
 	widget := &dashboards.DashboardWidget{
 		Visualization: dashboards.VisualizationType(cfg["visualization"].(string)),
 		ID:            cfg["widget_id"].(int),
+	}
+
+	if acctID, ok := cfg["account_id"]; ok {
+		widget.AccountID = acctID.(int)
 	}
 
 	err := validateWidgetData(cfg)
@@ -324,6 +329,27 @@ func flattenWidgets(in *[]dashboards.DashboardWidget) []map[string]interface{} {
 	var out = make([]map[string]interface{}, len(*in))
 	for i, w := range *in {
 		m := make(map[string]interface{})
+
+		viz := string(w.Visualization)
+
+		fmt.Println("****************************")
+		fmt.Printf("\n ACCT ID: %+v", w.AccountID)
+		fmt.Printf("\n VIZ:     %+v \n", viz)
+		fmt.Println("****************************")
+
+		// if string(w.Visualization) == "inaccessible" {
+		// 	m["widget_id"] = w.ID
+		// 	m["row"] = w.Layout.Row
+		// 	m["column"] = w.Layout.Column
+		// 	m["width"] = w.Layout.Width
+		// 	m["height"] = w.Layout.Height
+
+		// 	out[i] = m
+
+		// 	continue
+		// }
+
+		m["account_id"] = w.AccountID
 		m["widget_id"] = w.ID
 		m["visualization"] = w.Visualization
 		m["title"] = w.Presentation.Title
