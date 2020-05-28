@@ -267,11 +267,15 @@ func resourceNewRelicNrqlAlertCondition() *schema.Resource {
 	}
 }
 
+func intToString(number int) (string, error) {
+	out, err := strconv.Itoa(number)
+}
+
 func resourceNewRelicNrqlAlertConditionCreate(d *schema.ResourceData, meta interface{}) error {
 	providerConfig := meta.(*ProviderConfig)
 	client := providerConfig.NewClient
 
-	policyID := d.Get("policy_id").(int)
+	policyID := strconv.Itoa(d.Get("policy_id").(int))
 	conditionType := d.Get("type").(string)
 
 	if canUseNerdGraphNrqlAlertConditions(providerConfig, conditionType) {
