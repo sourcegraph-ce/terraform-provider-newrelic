@@ -10,7 +10,7 @@ package grpc
 import (
 	"context"
 	"errors"
-	"log"
+	log "github.com/sourcegraph-ce/logrus"
 	"os"
 	"strings"
 
