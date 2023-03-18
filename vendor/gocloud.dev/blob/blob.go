@@ -68,7 +68,7 @@ import (
 	"hash"
 	"io"
 	"io/ioutil"
-	"log"
+	log "github.com/sourcegraph-ce/logrus"
 	"mime"
 	"net/http"
 	"net/url"

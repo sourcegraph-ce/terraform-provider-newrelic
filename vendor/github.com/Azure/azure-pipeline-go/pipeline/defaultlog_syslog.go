@@ -3,7 +3,7 @@
 package pipeline
 
 import (
-	"log"
+	log "github.com/sourcegraph-ce/logrus"
 	"log/syslog"
 )
 

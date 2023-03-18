@@ -23,7 +23,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
+	log "github.com/sourcegraph-ce/logrus"
 	"os"
 	"strings"
 	"unicode/utf16"
